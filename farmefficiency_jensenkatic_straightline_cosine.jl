@@ -19,7 +19,7 @@ OUTPUT
 function farmefficiency_jensenkatic_straightline_cosine(coordinates, D, a, α, k)
 
 
-    function singlewakevelocitydeficit_katicv3(x, wake, turbine, a, α)
+    function areafractioninwake_cosine(x, wake, turbine)
 
         function f(y, w, D, y_offset)
             if abs(y) <= w
@@ -45,15 +45,10 @@ function farmefficiency_jensenkatic_straightline_cosine(coordinates, D, a, α, k
                 g[i+1] = f(y[i+1], (wake[2]-wake[1])/2, turbine[2]-turbine[1], (turbine[2]+turbine[1])/2-(wake[2]+wake[1])/2)
                 velocitydef_fraction[i] = (g[i] + g[i+1])/2 * (ub-lb)/numsegments / (pi/4 * (turbine[2]-turbine[1])^2)
             end
-            velocitydef_fraction = sum(velocitydef_fraction)
-            # if velocitydef_fraction
-            #     println("Velocity deficit fraction is over 1")
-            # end
-            return (2*a/(1 + 2*α*x/(turbine[2]-turbine[1]))^2)^2 * velocitydef_fraction
+            return sum(velocitydef_fraction) 
         end
     end
 
-    # energy deficit
     energydeftotal = 0
     n = length(coordinates[1,:])
     wakevelocity = zeros(n,1)
@@ -71,10 +66,8 @@ function farmefficiency_jensenkatic_straightline_cosine(coordinates, D, a, α, k
                 if connectvec[1] > 0
                      # turbine i is downstream from turbine j
                     if !((turbine_lowerbound < wake_lowerbound && turbine_upperbound < wake_lowerbound) || (turbine_lowerbound > wake_upperbound && turbine_upperbound > wake_upperbound))
-                        energydeftotal += singlewakevelocitydeficit_katicv3(connectvec[1], [wake_lowerbound; wake_upperbound], [turbine_lowerbound; turbine_upperbound], a, α)
-                    end
-                    if energydeftotal > 1
-                        println(energydeftotal)
+                        areafractioninwake = areafractioninwake_cosine(connectvec[1], [wake_lowerbound; wake_upperbound], [turbine_lowerbound; turbine_upperbound])
+                        energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], connectvec[2], D, a, α, k)^2
                     end
 
                 end
@@ -84,9 +77,6 @@ function farmefficiency_jensenkatic_straightline_cosine(coordinates, D, a, α, k
         end
 
         wakevelocity[i] = 1 - sqrt(energydeftotal)
-        if wakevelocity[i] < 0
-            # wakevelocity[i] = 0
-        end
         energydeftotal = 0
 
     end

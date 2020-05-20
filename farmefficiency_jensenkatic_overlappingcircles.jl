@@ -19,6 +19,7 @@ OUTPUT
 function farmefficiency_jensenkatic_overlappingcircles(coordinates, D, a, α, k)
 
 include("singlewakevelocitydeficit.jl")
+include("intersecting_circles_area.jl")
 
     # energy deficit
     energydeftotal = 0
