@@ -1,7 +1,7 @@
 """
     intersecting_circles_area(r1, r2, d)
 
-Computes the area of two overlapping circles.
+Compute the area of two overlapping circles.
 
 # Arguments
 - 'r1::Float': the radius of the first circle

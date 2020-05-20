@@ -1,4 +1,4 @@
-# jensenkaticmodel
+# katicfig3_jensenkaticmodel
 # Author: Wesley Holt
 # Date: 5/14/20
 
@@ -70,7 +70,9 @@ include("rotatefarm.jl")
         katicfig3_plot = plot!(katicfig3_data[:,1], katicfig3_data[:,2],
             linestyle = :dash,
             linewidth = line_width + 1,
+            linecolor = :black,
             label = "Katic's Results"  )
+        
         
         display(katicfig3_plot)
 

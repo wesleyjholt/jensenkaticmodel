@@ -1,19 +1,16 @@
 """
 
-    farmefficiency_jensenkatic(coordinates, winddirectionangle, D, a, θ_max)
+    farmefficiency_jensenkatic_overlappingcircles(coordinates, D, a, α, k)
 
-Calculates the efficiency of a given farm with a given wind direction.
+Calculate the efficiency of a given farm with a given wind direction, using overlapping circles for turbines partially in wakes.
 
-INPUT
-    coordinates: 2 by n array with the coordinates for each wind turbine
-    winddirectionangle: wind direction, measured in degrees CCW from the west direction
-    D: diameter of a turbine
-    a: initial velocity deficit
-    θ_max: the angle span of the wakes
-
-OUTPUT
-    E/E0, the efficiency of the farm
-
+# Arguments
+- 'coordinates::Array{Float64,2}': 2 by n array with the coordinates for each wind turbine
+- 'D::Float64': diameter of a turbine
+- 'a::Float64': initial velocity deficit
+- 'α::Float64': entrainment coefficient
+- 'k::Float64': amount of lateral spread of wake per unit longitudinal distance
+    
 """
 
 function farmefficiency_jensenkatic_overlappingcircles(coordinates, D, a, α, k)
@@ -41,21 +38,21 @@ include("intersecting_circles_area.jl")
 
                     if wake_lowerbound < turbine_upperbound < wake_upperbound && wake_lowerbound < turbine_lowerbound < wake_upperbound
                         # turbine i is completely in the wake of turbine j
-                        energydeftotal += singlewakevelocitydeficit(connectvec[1], connectvec[2], D, a, α, k)^2
+                        energydeftotal += singlewakevelocitydeficit(connectvec[1], D, a, α)^2
 
                     elseif wake_lowerbound < turbine_upperbound < wake_upperbound && turbine_lowerbound < wake_lowerbound
                         # turbine i is partially in the wake of turbine j
                         # (lower portion of turbine i is outside the wake)
 
                             areafractioninwake = intersecting_circles_area(D/2, wake_upperbound, abs(connectvec[2])) / (pi * (D/2)^2)
-                            energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], connectvec[2], D, a, α, k)^2
+                            energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], D, a, α)^2
 
                     elseif turbine_upperbound > wake_upperbound && wake_lowerbound < turbine_lowerbound < wake_upperbound
                         # turbine i is partially in the wake of turbine j
                         # (upper portion of turbine i is outside the wake)
 
                             areafractioninwake = intersecting_circles_area(D/2, wake_upperbound, abs(connectvec[2])) / (pi * (D/2)^2)
-                            energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], connectvec[2], D, a, α, k)^2
+                            energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], D, a, α)^2
                             if areafractioninwake > 1
                                 error("Area fraction in wake is greater than one")
                             end
