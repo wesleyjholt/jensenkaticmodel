@@ -1,6 +1,6 @@
 """
 
-        singlewakevelocitydeficit(x, D, a, α)
+    singlewakevelocitydeficit(x, D, a, α)
 
 Calculates the wind velocity at a turbine relative to the ambient wind velocity.
 
