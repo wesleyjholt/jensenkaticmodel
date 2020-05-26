@@ -53,9 +53,9 @@ include("intersecting_circles_area.jl")
 
                             areafractioninwake = intersecting_circles_area(D/2, wake_upperbound, abs(connectvec[2])) / (pi * (D/2)^2)
                             energydeftotal += areafractioninwake*singlewakevelocitydeficit(connectvec[1], D, a, α)^2
-                            if areafractioninwake > 1
-                                error("Area fraction in wake is greater than one")
-                            end
+                            # if areafractioninwake > 1
+                            #     error("Area fraction in wake is greater than one")
+                            # end
 
                     end
 

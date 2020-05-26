@@ -14,8 +14,8 @@ include("rotatefarm.jl")
     h = D       # turbine height
     u = 1       # ambient wind speed
     a = 1/3     
-    α = 0.08    #0.08   
-    k = 0.05    #0.06
+    α = 0.075    #0.08   
+    k = 0.075    #0.06
 
     coordinates = convert(Matrix, CSV.read("katicfig3_coordinates.csv", header=false))
 
